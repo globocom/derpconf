@@ -36,6 +36,11 @@ class Configuration(Vows.Context):
             def should_have_default_value(self, topic):
                 expect(topic.PROPER).to_equal('PROPERVALUE')
 
+            def should_have_set_value(self, topic):
+                expect(topic.FOO).to_equal('bar')
+
+            def should_not_have_lower_case_value(self, topic):
+                expect(hasattr(topic, 'baz')).to_be_false()
 
 
 

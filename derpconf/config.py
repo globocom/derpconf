@@ -69,7 +69,8 @@ class Config(object):
             conf = cls(defaults=defaults)
             conf.config_file = path
             for name, value in module.__dict__.iteritems():
-                setattr(conf, name, value)
+                if name.upper() == name:
+                    setattr(conf, name, value)
 
             return conf
 
