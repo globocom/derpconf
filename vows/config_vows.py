@@ -43,45 +43,44 @@ class Configuration(Vows.Context):
                 expect(hasattr(topic, 'baz')).to_be_false()
 
 
+    class WhenSettingAnAlias(Vows.Context):
 
-    #class WhenSettingAnAlias(Vows.Context):
+        def topic(self):
+            Config.alias('OTHER_ENGINE', 'ENGINE')
+            return Config(OTHER_ENGINE='x')
 
-        #def topic(self):
-            #Config.alias('OTHER_ENGINE', 'ENGINE')
-            #return Config(OTHER_ENGINE='x')
+        def should_set_engine_attribute(self, config):
+            expect(config.ENGINE).to_equal('x')
 
-        #def should_set_engine_attribute(self, config):
-            #expect(config.ENGINE).to_equal('x')
+        def should_set_other_engine_attribute(self, config):
+            expect(config.OTHER_ENGINE).to_equal('x')
 
-        #def should_set_other_engine_attribute(self, config):
-            #expect(config.OTHER_ENGINE).to_equal('x')
+    class WhenSettingAnAliasedKey(Vows.Context):
+        def topic(self):
+            Config.alias('LOADER_ALIAS', 'LOADER')
+            return Config(LOADER='y')
 
-    #class WhenSettingAnAliasedKey(Vows.Context):
-        #def topic(self):
-            #Config.alias('LOADER_ALIAS', 'LOADER')
-            #return Config(LOADER='y')
+        def should_set_loader_attribute(self, config):
+            expect(config.LOADER).to_equal('y')
 
-        #def should_set_loader_attribute(self, config):
-            #expect(config.LOADER).to_equal('y')
+        def should_set_loader_alias_attribute(self, config):
+            expect(config.LOADER_ALIAS).to_equal('y')
 
-        #def should_set_loader_alias_attribute(self, config):
-            #expect(config.LOADER_ALIAS).to_equal('y')
+    class WithAliasedAliases(Vows.Context):
+        def topic(self):
+            Config.alias('STORAGE_ALIAS', 'STORAGE')
+            Config.alias('STORAGE_ALIAS_ALIAS', 'STORAGE_ALIAS')
+            return Config(STORAGE_ALIAS_ALIAS='z')
 
-    #class WithAliasedAliases(Vows.Context):
-        #def topic(self):
-            #Config.alias('STORAGE_ALIAS', 'STORAGE')
-            #Config.alias('STORAGE_ALIAS_ALIAS', 'STORAGE_ALIAS')
-            #return Config(STORAGE_ALIAS_ALIAS='z')
+        def should_set_storage_attribute(self, config):
+            expect(config.STORAGE).to_equal('z')
 
-        #def should_set_storage_attribute(self, config):
-            #expect(config.STORAGE).to_equal('z')
+        def should_set_storage_alias_attribute(self, config):
+            expect(config.STORAGE_ALIAS).to_equal('z')
 
-        #def should_set_storage_alias_attribute(self, config):
-            #expect(config.STORAGE_ALIAS).to_equal('z')
+        def should_set_storage_alias_alias_attribute(self, config):
+            expect(config.STORAGE_ALIAS_ALIAS).to_equal('z')
 
-        #def should_set_storage_alias_alias_attribute(self, config):
-            #expect(config.STORAGE_ALIAS_ALIAS).to_equal('z')
-
-        #class WithDefaultValues(Vows.Context):
-            #def topic(self):
-                #return Config()
+        class WithDefaultValues(Vows.Context):
+            def topic(self):
+                return Config()
