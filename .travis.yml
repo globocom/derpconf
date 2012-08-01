@@ -2,12 +2,11 @@ language: python
 python:
     - 2.6
     - 2.7
-    - pypy
 
 install:
     - sudo apt-get install librtmp-dev
     - pip install -r requirements.txt --use-mirrors
 
 script:
-    - make ci_test
+    - make test
 
