@@ -11,6 +11,18 @@ Installing derpconf is as easy as:
 
     pip install derpconf
 
+Usage
+-----
+
+Using it is as simple as:
+
+    from derpconf.config import Config
+
+    conf = Config.load('/path/to/my/cfg.conf')
+
+    assert conf.MY_KEY == 'MY_VALUE' # assuming there's a key called MY_KEY in
+                                     # the configuration file.
+
 License
 -------
 
