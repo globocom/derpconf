@@ -113,32 +113,38 @@ class Config(object):
 
         raise AttributeError(name)
 
+    @classmethod
+    def get_config_text(cls):
+        result = []
+        MAX_LEN = 80
+        SEPARATOR = '#'
+        for group in cls.class_groups:
+            keys = cls.class_group_items[group]
+            sep_size = int(round((MAX_LEN - len(group)) / 2, 0)) - 1
+            group_name = SEPARATOR * sep_size + ' ' + group + ' ' + SEPARATOR * sep_size
+            if len(group_name) < MAX_LEN:
+                group_name += SEPARATOR
+            result.append(group_name)
+            for key in keys:
+                result.append('')
+                value = cls.class_defaults[key]
+                description = cls.class_descriptions[key]
+
+                wrapped = fill(description, width=78, subsequent_indent='## ')
+
+                result.append('## %s' % wrapped)
+                if key in cls.class_aliases:
+                    result.append('## Aliases: %s' % ', '.join(cls.class_aliases[key]))
+                result.append('## Defaults to: %s' % value)
+                result.append('#%s = %s' % (key, format_value(value)))
+            result.append('')
+            result.append(SEPARATOR * MAX_LEN)
+            result.append('')
+            result.append('')
+        return '\n'.join(result)
+
 def generate_config():
-    MAX_LEN = 80
-    SEPARATOR = '#'
-    for group in Config.class_groups:
-        keys = Config.class_group_items[group]
-        sep_size = int(round((MAX_LEN - len(group)) / 2, 0)) - 1
-        group_name = SEPARATOR * sep_size + ' ' + group + ' ' + SEPARATOR * sep_size
-        if len(group_name) < MAX_LEN:
-            group_name += SEPARATOR
-        print group_name
-        for key in keys:
-            print
-            value = Config.class_defaults[key]
-            description = Config.class_descriptions[key]
-
-            wrapped = fill(description, width=78, subsequent_indent='## ')
-
-            print '## %s' % wrapped
-            if key in Config.class_aliases:
-                print '## Aliases: %s' % ', '.join(Config.class_aliases[key])
-            print '## Defaults to: %s' % value
-            print '#%s = %s' % (key, format_value(value))
-        print
-        print SEPARATOR * MAX_LEN
-        print
-        print
+    print Config.get_config_text()
 
 def format_value(value):
     if isinstance(value, basestring):
@@ -152,4 +158,10 @@ def format_value(value):
     return value
 
 if __name__ == '__main__':
-    generate_config()
+    Config.define('foo', 'fooval', 'Foo is always a foo', 'FooValues')
+    Config.define('bar', 'barval', 'Bar is not always a bar', 'BarValues')
+    Config.define('baz', 'bazval', 'Baz is never a bar', 'BarValues')
+
+    config_sample = Config.get_config_text()
+    print config_sample # or instead of both, just call generate_config()
+

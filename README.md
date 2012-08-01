@@ -23,6 +23,60 @@ Using it is as simple as:
     assert conf.MY_KEY == 'MY_VALUE' # assuming there's a key called MY_KEY in
                                      # the configuration file.
 
+Settings Defaults
+-----------------
+
+If you want to set default values for your configurations, just call:
+
+    Config.define('MY-KEY', 'DEFAULT VALUE', 'Description for my key', 'Section')
+
+The values that define gets are:
+
+* the configuration key;
+* the default value for that key if it's not found in the configuration file;
+* the description for this key. This is very useful for generating
+configuration file examples.
+* the section that this key belongs to. Again very useful for generating
+configuration file examples.
+
+Generating Configuration Examples
+---------------------------------
+
+To generate a configuration example, you just need to call the
+`get_config_text` method. Let's see an example:
+
+    from derpconf.config import Config
+
+    Config.define('foo', 'fooval', 'Foo is always a foo', 'FooValues')
+    Config.define('bar', 'barval', 'Bar is not always a bar', 'BarValues')
+    Config.define('baz', 'bazval', 'Baz is never a bar', 'BarValues')
+
+    config_sample = Config.get_config_text()
+    print config_sample # or instead of both, just call generate_config()
+
+The following text will be print into the standard output:
+
+    ################################## FooValues ###################################
+
+    ## Foo is always a foo
+    ## Defaults to: fooval
+    #foo = 'fooval'
+
+    ################################################################################
+
+
+    ################################## BarValues ###################################
+
+    ## Bar is not always a bar
+    ## Defaults to: barval
+    #bar = 'barval'
+
+    ## Baz is never a bar
+    ## Defaults to: bazval
+    #baz = 'bazval'
+
+    ################################################################################
+
 License
 -------
 
