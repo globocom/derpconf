@@ -84,3 +84,4 @@ class Configuration(Vows.Context):
         class WithDefaultValues(Vows.Context):
             def topic(self):
                 return Config()
+
