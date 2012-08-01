@@ -27,6 +27,17 @@ class Configuration(Vows.Context):
                 expect(topic).to_be_an_error()
                 expect(topic).to_be_an_error_like(ConfigurationError)
 
+        class WhenFileExists(Vows.Context):
+            def topic(self):
+                return Config.load(fix('sample.conf'), defaults={
+                    'PROPER': 'PROPERVALUE'
+                })
+
+            def should_have_default_value(self, topic):
+                expect(topic.PROPER).to_equal('PROPERVALUE')
+
+
+
 
     #class WhenSettingAnAlias(Vows.Context):
 

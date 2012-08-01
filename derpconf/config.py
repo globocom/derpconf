@@ -45,12 +45,6 @@ class Config(object):
 
     @classmethod
     def get_conf_file(cls, conf_name, lookup_paths):
-        #lookup_conf_file_paths = [
-            #os.curdir,
-            #expanduser('~'),
-            #'/etc/',
-            #dirname(__file__)
-        #]
         for conf_path in lookup_paths:
             conf_path_file = abspath(join(conf_path, conf_name))
             if exists(conf_path_file):
@@ -59,12 +53,12 @@ class Config(object):
         raise ConfigurationError('%s file not passed and not found on the lookup paths %s' % (conf_name, lookup_paths))
 
     @classmethod
-    def load(cls, path, conf_name=None, lookup_paths=[]):
+    def load(cls, path, conf_name=None, lookup_paths=[], defaults={}):
         if path is None and conf_name is not None and lookup_paths:
             path = cls.get_conf_file(conf_name, lookup_paths)
 
         if not exists(path):
-            raise ConfigurationError('Configuration file not found')
+            raise ConfigurationError('Configuration file not found at path %s' % path)
 
         with open(path) as config_file:
             name='configuration'
@@ -72,7 +66,7 @@ class Config(object):
             module = imp.new_module(name)
             exec code in module.__dict__
 
-            conf = cls()
+            conf = cls(defaults=defaults)
             conf.config_file = path
             for name, value in module.__dict__.iteritems():
                 setattr(conf, name, value)
