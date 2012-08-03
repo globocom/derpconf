@@ -141,20 +141,32 @@ class Config(object):
             result.append(SEPARATOR * MAX_LEN)
             result.append('')
             result.append('')
-        return '\n'.join(result)
+        return u'\n'.join(result)
 
 def generate_config():
     print Config.get_config_text()
+
+spaces = ' ' * 4
+def format_tuple(value, tabs=0):
+    separator = spaces * (tabs + 1)
+    item_separator = spaces * (tabs + 2)
+    start_delimiter = isinstance(value, tuple) and '(' or '['
+    end_delimiter = isinstance(value, tuple) and ')' or ']'
+
+    representation = "#%s%s\n" % (separator, start_delimiter)
+    for item in value:
+        if isinstance(item, (tuple, list, set)):
+            representation += format_tuple(item, tabs + 1)
+        else:
+            representation += '#%s' % item_separator + format_value(item) + ",\n"
+    representation += "#%s%s%s\n" % (separator, end_delimiter, (tabs > 0 and ',' or ''))
+    return representation
 
 def format_value(value):
     if isinstance(value, basestring):
         return "'%s'" % value
     if isinstance(value, (tuple, list, set)):
-        representation = '[\n'
-        for item in value:
-            representation += '#    %s' % item
-        representation += '#]'
-        return representation
+        return format_tuple(value)
     return value
 
 if __name__ == '__main__':
