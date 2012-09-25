@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+PYTHON2		?= $(shell pyversions -vr)
+
+build build-arch build-indep:
+	@echo Nothing to do
+
+%:
+	dh $@ --with python2
+
+build-python%:
+	python$* setup.py build
+
+install-python%:
+	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
+
+override_dh_auto_install: $(PYTHON3:%=install-python%)
+	dh_auto_install
+
+override_dh_installdocs:
+	dh_installdocs README.md
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf build
+	rm -rf *.egg-info
