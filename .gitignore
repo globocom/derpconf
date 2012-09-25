@@ -32,3 +32,4 @@ pip-log.txt
 /debian/files
 /debian/python-derpconf.*
 /debian/python-derpconf
+/debian/tmp

@@ -5,22 +5,30 @@ PYTHON2		?= $(shell pyversions -vr)
 build build-arch build-indep:
 	@echo Nothing to do
 
-%:
-	dh $@ --with python2
+binary: binary-indep
 
-build-python%:
-	python$* setup.py build
+binary-arch:
+	@echo Nothing to do
 
-install-python%:
-	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
-
-override_dh_auto_install: $(PYTHON3:%=install-python%)
-	dh_auto_install
-
-override_dh_installdocs:
+binary-indep:
+	dh_testroot
+	dh_prep
+	python$(PYTHON2) setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
+	dh_install
+	dh_installdirs
 	dh_installdocs README.md
+	dh_installchangelogs
+	dh_lintian
+	dh_python2
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
-override_dh_auto_clean:
-	dh_auto_clean
+clean:
+	dh_clean
 	rm -rf build
 	rm -rf *.egg-info
+	find . -name \*.pyc -print0 | xargs -0 rm
