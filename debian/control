@@ -12,7 +12,7 @@ Vcs-Browser: https://github.com/globocom/derpconf
 Package: python-derpconf
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}
-Provides: ${python:Provides}, pyrad
+Provides: ${python:Provides}
 Description: Python module to abstract loading configuration files for your app.
  derpconf abstracts loading configuration files for your app. derpconf was
  extracted from thumbor.
