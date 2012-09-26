@@ -1,0 +1,34 @@
+#!/usr/bin/make -f
+
+PYTHON2		?= $(shell pyversions -vr)
+
+build build-arch build-indep:
+	@echo Nothing to do
+
+binary: binary-indep
+
+binary-arch:
+	@echo Nothing to do
+
+binary-indep:
+	dh_testroot
+	dh_prep
+	python$(PYTHON2) setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
+	dh_install
+	dh_installdirs
+	dh_installdocs README.md
+	dh_installchangelogs
+	dh_lintian
+	dh_python2
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+clean:
+	dh_clean
+	rm -rf build
+	rm -rf *.egg-info
+	find . -name \*.pyc -print0 | xargs -0 rm

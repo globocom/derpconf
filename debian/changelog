@@ -1,0 +1,5 @@
+derpconf (0.3.0-1) precise; urgency=low
+
+  * First packaging
+
+ -- Wichert Akkerman <wichert@wiggy.net>  Tue, 25 Sep 2012 10:04:40 +0200

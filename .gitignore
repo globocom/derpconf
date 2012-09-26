@@ -25,3 +25,11 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+
+# Debian packaging
+/debian/debhelper.log
+/debian/files
+/debian/python-derpconf.*
+/debian/python-derpconf
+/debian/tmp
