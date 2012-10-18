@@ -42,6 +42,31 @@ class Configuration(Vows.Context):
             def should_not_have_lower_case_value(self, topic):
                 expect(hasattr(topic, 'baz')).to_be_false()
 
+        class WhenPathIsNone(Vows.Context):
+            class AndConfNameExists(Vows.Context):
+                def topic(self):
+                    return Config.load(None, conf_name='sample.conf', lookup_paths=['vows/fixtures/'])
+
+                def should_have_set_value(self, topic):
+                    expect(topic.FOO).to_equal('bar')
+
+            class AndConfNameDoesNotExist(Vows.Context):
+                def topic(self):
+                    return Config.load(
+                        None, conf_name='not-existent.conf',
+                        lookup_paths=['vows/fixtures/'],
+                        defaults={'DEFAULT': 'DEFAULTVALUE'}
+                    )
+
+                def should_have_default_values(self, topic):
+                    expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
+
+            class AndConfNameIsNone(Vows.Context):
+                def topic(self):
+                    return Config.load(None, defaults={'DEFAULT': 'DEFAULTVALUE'})
+
+                def should_have_default_values(self, topic):
+                    expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
 
     class WhenSettingAnAlias(Vows.Context):
 
