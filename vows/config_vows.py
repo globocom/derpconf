@@ -68,13 +68,6 @@ class Configuration(Vows.Context):
                 def should_have_default_values(self, topic):
                     expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
 
-        class WhenPathIsNotGiven(Vows.Context):
-            def topic(self):
-                return Config.load(None, defaults={'DEFAULT': 'DEFAULTVALUE'})
-
-            def should_have_default_values(self, topic):
-                expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
-
     class WhenSettingAnAlias(Vows.Context):
 
         def topic(self):
