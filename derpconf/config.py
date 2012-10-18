@@ -48,13 +48,16 @@ class Config(object):
             conf_path_file = abspath(join(conf_path, conf_name))
             if exists(conf_path_file):
                 return conf_path_file
-
-        raise ConfigurationError('%s file not passed and not found on the lookup paths %s' % (conf_name, lookup_paths))
+                
+        return None
 
     @classmethod
     def load(cls, path, conf_name=None, lookup_paths=[], defaults={}):
         if path is None and conf_name is not None and lookup_paths:
             path = cls.get_conf_file(conf_name, lookup_paths)
+
+        if path is None:
+            return cls(defaults=defaults)
 
         if not exists(path):
             raise ConfigurationError('Configuration file not found at path %s' % path)
