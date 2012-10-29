@@ -10,7 +10,7 @@
 
 import logging
 from collections import defaultdict
-from os.path import join, exists, abspath
+from os.path import join, exists, abspath, dirname
 import imp
 
 from textwrap import fill
@@ -176,6 +176,19 @@ class Config(object):
             result.append('')
         return u'\n'.join(result)
 
+def verify_config(path=None):
+    OKBLUE = '\033[94m'
+    ENDC = '\033[0m'
+
+    if path is None:
+        if len(sys.argv) < 2:
+            raise ValueError('You need to specify a path to verify.')
+        path = sys.argv[1]
+    validation = Config.verify(path)
+
+    for error in validation:
+        print 'Configuration "{0}{1}{2}" not found in file {3}'.format(OKBLUE, error, ENDC, path)
+
 def generate_config():
     print Config.get_config_text()
 
@@ -210,3 +223,4 @@ if __name__ == '__main__':
     config_sample = Config.get_config_text()
     print config_sample # or instead of both, just call generate_config()
 
+    verify_config(abspath(join(dirname(__file__), '../vows/fixtures/missing.conf')))
