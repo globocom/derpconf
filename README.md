@@ -82,10 +82,29 @@ The following text will be print into the standard output:
 A good sample of using derpconf can be seen at [thumbor's configuration
 file](https://github.com/globocom/thumbor/blob/master/thumbor/config.py).
 
-Validating a Configuration File
--------------------------------
+Verifying a Configuration File
+------------------------------
 
+derpconf includes a configuration file verifier. The purpose of this verifier
+is to help you quickly understand what configuration files are missing what
+keys and what values will be used for them instead.
 
+Running it is as simple as including a call to `verify_config` in your
+`config.py` file:
+
+    verify_config(file_path)
+
+Or you can leave it blank and derpconf will get the file path from `sys.argv`:
+
+    verify_config()
+
+The output of the verifier is something like this:
+
+    Configuration "baz" not found in file /Users/bernardo/dev/derpconf/vows/fixtures/missing.conf. Using "bazval" instead.
+    Configuration "foo" not found in file /Users/bernardo/dev/derpconf/vows/fixtures/missing.conf. Using "fooval" instead.
+    Configuration "bar" not found in file /Users/bernardo/dev/derpconf/vows/fixtures/missing.conf. Using "barval" instead.
+
+You can see it in use at [derpconf's code](https://github.com/globocom/derpconf/blob/master/derpconf/config.py).
 
 License
 -------
