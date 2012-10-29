@@ -110,3 +110,11 @@ class Configuration(Vows.Context):
             def topic(self):
                 return Config()
 
+    class WhenVerifying(Vows.Context):
+        def topic(self):
+            Config.define('some_key', 'default', 'test key')
+            return Config.verify(fix('missing.conf'))
+
+        def should_be_lengthy(self, topic):
+            expect(topic).to_length(1)
+

@@ -76,6 +76,36 @@ class Config(object):
 
             return conf
 
+    @classmethod
+    def verify(cls, path):
+        if path is None and conf_name is not None and lookup_paths:
+            path = cls.get_conf_file(conf_name, lookup_paths)
+
+        if path is None:
+            return []
+
+        if not exists(path):
+            raise ConfigurationError('Configuration file not found at path %s' % path)
+
+        with open(path) as config_file:
+            name='configuration'
+            code = config_file.read()
+            module = imp.new_module(name)
+            exec code in module.__dict__
+
+            conf = cls(defaults=[])
+            for name, value in module.__dict__.iteritems():
+                if name.upper() == name:
+                    setattr(conf, name, value)
+
+            not_found = []
+            for key, value in cls.class_defaults.iteritems():
+                if key not in conf.__dict__:
+                    not_found.append(key)
+
+            return not_found
+
+
     def __init__(self, **kw):
         if 'defaults' in kw:
             self.defaults = kw['defaults']
