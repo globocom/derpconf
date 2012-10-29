@@ -101,7 +101,7 @@ class Config(object):
             not_found = []
             for key, value in cls.class_defaults.iteritems():
                 if key not in conf.__dict__:
-                    not_found.append(key)
+                    not_found.append((key, value))
 
             return not_found
 
@@ -179,6 +179,7 @@ class Config(object):
 def verify_config(path=None):
     OKBLUE = '\033[94m'
     ENDC = '\033[0m'
+    OKGREEN = '\033[92m'
 
     if path is None:
         if len(sys.argv) < 2:
@@ -187,7 +188,7 @@ def verify_config(path=None):
     validation = Config.verify(path)
 
     for error in validation:
-        print 'Configuration "{0}{1}{2}" not found in file {3}'.format(OKBLUE, error, ENDC, path)
+        print 'Configuration "{0}{1}{2}" not found in file {3}. Using "{4}{5}{2}" instead.'.format(OKBLUE, error[0], ENDC, path, OKGREEN, error[1])
 
 def generate_config():
     print Config.get_config_text()

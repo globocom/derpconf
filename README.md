@@ -82,6 +82,11 @@ The following text will be print into the standard output:
 A good sample of using derpconf can be seen at [thumbor's configuration
 file](https://github.com/globocom/thumbor/blob/master/thumbor/config.py).
 
+Validating a Configuration File
+-------------------------------
+
+
+
 License
 -------
 
