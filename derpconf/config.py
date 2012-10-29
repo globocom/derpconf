@@ -8,6 +8,7 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2012 globo.com timehome@corp.globo.com
 
+import sys
 import logging
 from collections import defaultdict
 from os.path import join, exists, abspath, dirname
