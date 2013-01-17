@@ -2,24 +2,24 @@
 
 PYTHON2		?= $(shell pyversions -vr)
 
-build build-arch build-indep:
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	python setup.py build
+	touch build-stamp
+
+build-arch build-indep:
 	@echo Nothing to do
 
 binary: binary-indep
 
-binary-arch:
-	@echo Nothing to do
-
-binary-indep:
+binary-indep: build install 
+	dh_testdir
 	dh_testroot
-	dh_prep
-	python$(PYTHON2) setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
-	dh_install
-	dh_installdirs
 	dh_installdocs README.md
 	dh_installchangelogs
 	dh_lintian
-	dh_python2
 	dh_compress
 	dh_fixperms
 	dh_installdeb
@@ -27,8 +27,20 @@ binary-indep:
 	dh_md5sums
 	dh_builddeb
 
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	python$(PYTHON2) setup.py install --root=$(CURDIR)/debian/python-derpconf --install-layout=deb
+	dh_python2
+
+
 clean:
-	dh_clean
-	rm -rf build
+	dh_testdir
+	dh_testroot
+	rm -f build
+	rm -rf build-stamp
 	rm -rf *.egg-info
-	find . -name \*.pyc -print0 | xargs -0 rm
+	find . -name '*.py[co]' | xargs rm -f
+	dh_clean
