@@ -39,7 +39,7 @@ install: build
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build
+	rm -rf build
 	rm -rf build-stamp
 	rm -rf *.egg-info
 	find . -name '*.py[co]' | xargs rm -f
