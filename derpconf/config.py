@@ -68,8 +68,9 @@ class Config(object):
             name = 'configuration'
             code = config_file.read()
             module = imp.new_module(name)
+
             try:
-                exec code in module.__dict__
+                eval("exec code in module.__dict__")
             except SyntaxError:
                 exec(code, module.__dict__)
 
