@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# derpconf 
+# derpconf
 # https://github.com/globocom/derpconf
 
 # Licensed under the MIT license:
@@ -16,8 +16,10 @@ import imp
 
 from textwrap import fill
 
+
 class ConfigurationError(RuntimeError):
     pass
+
 
 class Config(object):
     class_defaults = {}
@@ -49,7 +51,6 @@ class Config(object):
             conf_path_file = abspath(join(conf_path, conf_name))
             if exists(conf_path_file):
                 return conf_path_file
-                
         return None
 
     @classmethod
@@ -64,10 +65,13 @@ class Config(object):
             raise ConfigurationError('Configuration file not found at path %s' % path)
 
         with open(path) as config_file:
-            name='configuration'
+            name = 'configuration'
             code = config_file.read()
             module = imp.new_module(name)
-            exec code in module.__dict__
+            try:
+                exec code in module.__dict__
+            except SyntaxError:
+                exec(code, module.__dict__)
 
             conf = cls(defaults=defaults)
             conf.config_file = path
@@ -79,9 +83,6 @@ class Config(object):
 
     @classmethod
     def verify(cls, path):
-        if path is None and conf_name is not None and lookup_paths:
-            path = cls.get_conf_file(conf_name, lookup_paths)
-
         if path is None:
             return []
 
@@ -89,7 +90,7 @@ class Config(object):
             raise ConfigurationError('Configuration file not found at path %s' % path)
 
         with open(path) as config_file:
-            name='configuration'
+            name = 'configuration'
             code = config_file.read()
             module = imp.new_module(name)
             exec code in module.__dict__
@@ -105,7 +106,6 @@ class Config(object):
                     not_found.append((key, value))
 
             return not_found
-
 
     def __init__(self, **kw):
         if 'defaults' in kw:
@@ -177,6 +177,7 @@ class Config(object):
             result.append('')
         return u'\n'.join(result)
 
+
 def verify_config(path=None):
     OKBLUE = '\033[94m'
     ENDC = '\033[0m'
@@ -191,10 +192,13 @@ def verify_config(path=None):
     for error in validation:
         print 'Configuration "{0}{1}{2}" not found in file {3}. Using "{4}{5}{2}" instead.'.format(OKBLUE, error[0], ENDC, path, OKGREEN, error[1])
 
+
 def generate_config():
     print Config.get_config_text()
 
 spaces = ' ' * 4
+
+
 def format_tuple(value, tabs=0):
     separator = spaces * (tabs + 1)
     item_separator = spaces * (tabs + 2)
@@ -210,6 +214,7 @@ def format_tuple(value, tabs=0):
     representation += "#%s%s%s\n" % (separator, end_delimiter, (tabs > 0 and ',' or ''))
     return representation
 
+
 def format_value(value):
     if isinstance(value, basestring):
         return "'%s'" % value
@@ -223,6 +228,6 @@ if __name__ == '__main__':
     Config.define('baz', 'bazval', 'Baz is never a bar', 'BarValues')
 
     config_sample = Config.get_config_text()
-    print config_sample # or instead of both, just call generate_config()
+    print config_sample  # or instead of both, just call generate_config()
 
     verify_config(abspath(join(dirname(__file__), '../vows/fixtures/missing.conf')))

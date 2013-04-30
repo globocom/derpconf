@@ -1,4 +1,5 @@
-http://gevent.googlecode.com/files/gevent-1.0b2.tar.gz
+gevent
 tornado-pyvows
 coverage
 colorama
+tox
