@@ -179,7 +179,7 @@ class Config(object):
             result.append(SEPARATOR * MAX_LEN)
             result.append('')
             result.append('')
-        return u'\n'.join(result)
+        return '\n'.join(result)
 
 
 def verify_config(path=None):
