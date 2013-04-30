@@ -194,11 +194,11 @@ def verify_config(path=None):
     validation = Config.verify(path)
 
     for error in validation:
-        print 'Configuration "{0}{1}{2}" not found in file {3}. Using "{4}{5}{2}" instead.'.format(OKBLUE, error[0], ENDC, path, OKGREEN, error[1])
+        sys.stdout.write('Configuration "{0}{1}{2}" not found in file {3}. Using "{4}{5}{2}" instead.\n'.format(OKBLUE, error[0], ENDC, path, OKGREEN, error[1]))
 
 
 def generate_config():
-    print Config.get_config_text()
+    sys.stdout.write("%s\n" % Config.get_config_text())
 
 spaces = ' ' * 4
 
@@ -232,6 +232,6 @@ if __name__ == '__main__':
     Config.define('baz', 'bazval', 'Baz is never a bar', 'BarValues')
 
     config_sample = Config.get_config_text()
-    print config_sample  # or instead of both, just call generate_config()
+    sys.stdout.write("%s\n" % config_sample)  # or instead of both, just call generate_config()
 
     verify_config(abspath(join(dirname(__file__), '../vows/fixtures/missing.conf')))
