@@ -76,7 +76,7 @@ class Config(object):
 
             conf = cls(defaults=defaults)
             conf.config_file = path
-            for name, value in module.__dict__.iteritems():
+            for name, value in module.__dict__.items():
                 if name.upper() == name:
                     setattr(conf, name, value)
 
@@ -100,12 +100,12 @@ class Config(object):
                 eval("exec(code, module.__dict__)")
 
             conf = cls(defaults=[])
-            for name, value in module.__dict__.iteritems():
+            for name, value in module.__dict__.items():
                 if name.upper() == name:
                     setattr(conf, name, value)
 
             not_found = []
-            for key, value in cls.class_defaults.iteritems():
+            for key, value in cls.class_defaults.items():
                 if key not in conf.__dict__:
                     not_found.append((key, value))
 
@@ -115,7 +115,7 @@ class Config(object):
         if 'defaults' in kw:
             self.defaults = kw['defaults']
 
-        for key, value in kw.iteritems():
+        for key, value in kw.items():
             setattr(self, key, value)
 
     def validates_presence_of(self, *args):
