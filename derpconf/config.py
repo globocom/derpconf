@@ -72,7 +72,7 @@ class Config(object):
             try:
                 eval("exec code in module.__dict__")
             except SyntaxError:
-                exec(code, module.__dict__)
+                eval("exec(code, module.__dict__)")
 
             conf = cls(defaults=defaults)
             conf.config_file = path
@@ -94,7 +94,10 @@ class Config(object):
             name = 'configuration'
             code = config_file.read()
             module = imp.new_module(name)
-            exec code in module.__dict__
+            try:
+                eval("exec code in module.__dict__")
+            except SyntaxError:
+                eval("exec(code, module.__dict__)")
 
             conf = cls(defaults=[])
             for name, value in module.__dict__.iteritems():
