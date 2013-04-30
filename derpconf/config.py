@@ -14,6 +14,7 @@ from collections import defaultdict
 from os.path import join, exists, abspath, dirname
 import imp
 
+import six
 from textwrap import fill
 
 
@@ -69,10 +70,7 @@ class Config(object):
             code = config_file.read()
             module = imp.new_module(name)
 
-            try:
-                eval("exec code in module.__dict__")
-            except SyntaxError:
-                eval("exec(code, module.__dict__)")
+            six.exec_(code, module.__dict__)
 
             conf = cls(defaults=defaults)
             conf.config_file = path
@@ -94,10 +92,8 @@ class Config(object):
             name = 'configuration'
             code = config_file.read()
             module = imp.new_module(name)
-            try:
-                eval("exec code in module.__dict__")
-            except SyntaxError:
-                eval("exec(code, module.__dict__)")
+
+            six.exec_(code, module.__dict__)
 
             conf = cls(defaults=[])
             for name, value in module.__dict__.items():

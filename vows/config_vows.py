@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# derpconf 
+# derpconf
 # https://github.com/globocom/derpconf
 
 # Licensed under the MIT license:
@@ -15,6 +15,7 @@ from pyvows import Vows, expect
 from derpconf.config import Config, ConfigurationError
 
 fix = lambda name: abspath(join(dirname(__file__), 'fixtures', name))
+
 
 @Vows.batch
 class Configuration(Vows.Context):
@@ -117,4 +118,3 @@ class Configuration(Vows.Context):
 
         def should_be_lengthy(self, topic):
             expect(topic).to_length(1)
-
