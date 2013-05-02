@@ -147,6 +147,14 @@ class Config(object):
 
         raise AttributeError(name)
 
+    def __getitem__(self, name):
+        if hasattr(self, name):
+            return getattr(self, name)
+        raise KeyError('No config called \'%s\'' % name)
+
+    def __setitem__(self, name, value):
+        setattr(self, name, value)
+
     @classmethod
     def get_config_text(cls):
         result = []

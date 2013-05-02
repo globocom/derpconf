@@ -118,3 +118,21 @@ class Configuration(Vows.Context):
 
         def should_be_lengthy(self, topic):
             expect(topic).to_length(1)
+
+    class WhenUsedAsDict(Vows.Context):
+        def topic(self):
+            return Config.load(fix('sample.conf'))
+
+        def should_have_get_value_as_dict(self, topic):
+            expect(topic['FOO']).to_equal('bar')
+
+        def should_have_set_value_as_dict(self, topic):
+            topic['X'] = 'something'
+            expect(topic['X']).to_equal('something')
+
+        class WithError(Vows.Context):
+            def topic(self, parent_topic):
+                return parent_topic['INVALID_KEY']
+
+            def should_raise_key_error(self, topic):
+                expect(topic).to_be_an_error_like(KeyError)
