@@ -224,7 +224,7 @@ def format_tuple(value, tabs=0):
 
 
 def format_value(value):
-    if isinstance(value, basestring):
+    if isinstance(value, six.string_types):
         return "'%s'" % value
     if isinstance(value, (tuple, list, set)):
         return format_tuple(value)
