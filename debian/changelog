@@ -1,3 +1,19 @@
+derpconf (0.4.9-1) unstable; urgency=low
+
+  * New release 0.4.9;
+  * Fixed python-six dependency;
+  * Fixed python support;
+  * Minimizing rules file;
+  * Improving package description;
+  * Refactoring Maintainer field; Now globo.com is the Maintainer
+    and I and Wichert as uploaders;
+  * Switch to dpkg-source 3.0 (quilt) format;
+  * Convert copyright file to machine readable specification;
+  * Fixed debhelper compatibility level;
+  * Updated Standards-Version to 3.9.4 (no changes).
+
+ -- Marcelo Jorge Vieira (metal) <metal@debian.org>  Wed, 20 Nov 2013 19:23:15 -0200
+
 derpconf (0.3.3ubuntu1) precise; urgency=low
 
   * Fixes on rules file - missing python libs after install package
