@@ -1,3 +1,9 @@
+derpconf (0.4.9-2) unstable; urgency=low
+
+  * Added docs file
+
+ -- Marcelo Jorge Vieira (metal) <metal@debian.org>  Wed, 20 Nov 2013 21:18:47 -0200
+
 derpconf (0.4.9-1) unstable; urgency=low
 
   * New release 0.4.9;
