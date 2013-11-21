@@ -5,7 +5,7 @@ python:
 
 install:
   - sudo apt-get install -y librtmp-dev libevent-dev
-  - pip install -r requirements.txt --use-mirrors
+  - make setup
 
 script:
   - make test
