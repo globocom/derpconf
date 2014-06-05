@@ -136,3 +136,11 @@ class Configuration(Vows.Context):
 
             def should_raise_key_error(self, topic):
                 expect(topic).to_be_an_error_like(KeyError)
+
+    class WhenGetDescription(Vows.Context):
+        def topic(self):
+            Config.define('some_key', 'default', 'test key')
+            return Config.load(fix('missing.conf'))
+
+        def should_have_description(self, topic):
+            expect(topic.get_description('some_key')).to_equal('test key')
