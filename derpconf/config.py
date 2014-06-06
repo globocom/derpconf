@@ -9,6 +9,7 @@
 # Copyright (c) 2012 globo.com timehome@corp.globo.com
 
 import sys
+import os
 import logging
 from collections import defaultdict
 from os.path import join, exists, abspath, dirname
@@ -30,6 +31,7 @@ class Config(object):
 
     class_aliases = defaultdict(list)
     class_aliased_items = {}
+    _allow_environment_variables = False
 
     @classmethod
     def define(cls, key, value, description, group='General'):
@@ -53,6 +55,10 @@ class Config(object):
             if exists(conf_path_file):
                 return conf_path_file
         return None
+
+    @classmethod
+    def allow_environment_variables(cls):
+        cls._allow_environment_variables = True
 
     @classmethod
     def load(cls, path, conf_name=None, lookup_paths=[], defaults={}):
@@ -135,6 +141,17 @@ class Config(object):
             self.__setattr__(Config.class_aliased_items[name], value)
         else:
             super(Config, self).__setattr__(name, value)
+
+    def __getattribute__(self, name):
+        if name in ['allow_environment_variables']:
+            return super(Config, self).__getattribute__(name)
+
+        if self.allow_environment_variables:
+            value = os.environ.get(name, None)
+            if value is not None:
+                return value
+
+        return super(Config, self).__getattribute__(name)
 
     def __getattr__(self, name):
         if name in self.__dict__:

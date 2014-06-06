@@ -41,6 +41,22 @@ configuration file examples.
 * the section that this key belongs to. Again very useful for generating
 configuration file examples.
 
+Using Environment Variables
+---------------------------
+
+If you wish to allow environment variables to be used as the value of configuration keys, just call the `allow_environment_variables` method in your `config.py` file:
+
+    from derpconf.config import Config
+
+    Config.allow_environment_variables()
+
+If there's an environment variable with the same name as the given configuration, derpconf will give precedence to it, instead of using the default value or the value in the configuration file.
+
+    # called program with SOMETHING=value myprogram.py
+    assert config.SOMETHING == "value"
+
+    # even if the default for 'SOMETHING' or the value in the config file is different from 'value'
+
 Generating Configuration Examples
 ---------------------------------
 

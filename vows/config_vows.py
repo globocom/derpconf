@@ -8,6 +8,7 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2012 globo.com timehome@corp.globo.com
 
+import os
 from os.path import abspath, join, dirname
 
 from pyvows import Vows, expect
@@ -154,3 +155,30 @@ class Configuration(Vows.Context):
 
         def should_have_description(self, topic):
             expect(topic.get_description('some_key')).to_equal('test key')
+
+    class WhenGettingFromEnvironment(Vows.Context):
+        class WhenKeyDoesNotExistInConfiguration(Vows.Context):
+            def topic(self):
+                os.environ['SOME_CONFIGURATION'] = "test value"
+                config = Config()
+
+                Config.allow_environment_variables()
+
+                return config.SOME_CONFIGURATION
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal("test value")
+
+        class WhenKeyExistsInConfigurationFile(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO'] = "baz"
+                    return config.FOO
+                finally:
+                    del os.environ['FOO']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal("baz")
