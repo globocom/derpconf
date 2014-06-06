@@ -124,6 +124,11 @@ class Config(object):
             return getattr(self, name)
         return default
 
+    def get_description(self, name):
+        if hasattr(self, name):
+            return self.class_descriptions.get(name, None)
+        raise KeyError('No config called \'%s\'' % name)
+
     def __setattr__(self, name, value):
         if name in Config.class_aliased_items:
             logging.warn('Option %s is marked as deprecated please use %s instead.' % (name, Config.class_aliased_items[name]))
