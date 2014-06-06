@@ -22,7 +22,12 @@ class Configuration(Vows.Context):
     class WhenLoading(Vows.Context):
         class WhenFileDoesNotExist(Vows.Context):
             def topic(self):
-                Config.load(fix('not-existent.conf'))
+                err = expect.error_to_happen(ConfigurationError)
+
+                with err:
+                    Config.load(fix('not-existent.conf'))
+
+                return err
 
             def should_be_an_error(self, topic):
                 expect(topic).to_be_an_error()
@@ -132,7 +137,12 @@ class Configuration(Vows.Context):
 
         class WithError(Vows.Context):
             def topic(self, parent_topic):
-                return parent_topic['INVALID_KEY']
+                err = expect.error_to_happen(KeyError)
+
+                with err:
+                    parent_topic['INVALID_KEY']
+
+                return err
 
             def should_raise_key_error(self, topic):
                 expect(topic).to_be_an_error_like(KeyError)
