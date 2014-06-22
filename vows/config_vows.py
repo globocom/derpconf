@@ -182,3 +182,23 @@ class Configuration(Vows.Context):
 
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("baz")
+
+    class WhenReloading(Vows.Context):
+        def topic(self):
+            class SpecialConfig(Config):
+                pass
+
+            config = SpecialConfig.load(fix('sample.conf'), defaults={
+                'PROPER': 'PROPERVALUE'
+            })
+
+            SpecialConfig.define('UBERFOO', 'baz', 'something', 'else')
+
+            config.reload()
+
+            return config
+
+        def should_have_uberfoo(self, topic):
+            expect(hasattr(topic, 'UBERFOO')).to_be_true()
+            expect(topic.UBERFOO).to_equal('baz')
+

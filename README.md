@@ -57,6 +57,24 @@ If there's an environment variable with the same name as the given configuration
 
     # even if the default for 'SOMETHING' or the value in the config file is different from 'value'
 
+Reloading Configurations
+------------------------
+
+After you've loaded configurations from a file, sometimes it's needed to have them reloaded. This is the case when a new module needs to define some new default values.
+
+In order to reload values from a config object, just call `reload` on it:
+
+    from derpconf.config import Config
+
+    conf = Config.load('/path/to/my/cfg.conf')
+
+    # then later on...
+
+    Config.define('SOMENEWFOO', 'bar', 'baz', 'foo')
+
+    conf.reload()
+    assert conf.SOMENEWFOO == 'bar'
+
 Generating Configuration Examples
 ---------------------------------
 

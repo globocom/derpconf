@@ -71,6 +71,11 @@ class Config(object):
         if not exists(path):
             raise ConfigurationError('Configuration file not found at path %s' % path)
 
+        conf = cls(defaults=defaults)
+        return cls.__load_from_path(conf, path)
+
+    @classmethod
+    def __load_from_path(cls, conf, path):
         with open(path) as config_file:
             name = 'configuration'
             code = config_file.read()
@@ -78,7 +83,6 @@ class Config(object):
 
             six.exec_(code, module.__dict__)
 
-            conf = cls(defaults=defaults)
             conf.config_file = path
             for name, value in module.__dict__.items():
                 if name.upper() == name:
@@ -119,6 +123,13 @@ class Config(object):
 
         for key, value in kw.items():
             setattr(self, key, value)
+
+    def reload(self):
+        cfg = getattr(self, 'config_file', None)
+        if cfg is None:
+            return
+
+        self.__load_from_path(self, cfg)
 
     def validates_presence_of(self, *args):
         for arg in args:
