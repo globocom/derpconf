@@ -34,3 +34,4 @@ pip-log.txt
 /debian/python-derpconf
 /debian/tmp
 .venv
+.ropeproject/

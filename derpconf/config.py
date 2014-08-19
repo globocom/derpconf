@@ -38,7 +38,7 @@ class Config(object):
         cls.class_defaults[key] = value
         cls.class_descriptions[key] = description
         cls.class_group_items[group].append(key)
-        if not group in cls.class_groups:
+        if group not in cls.class_groups:
             cls.class_groups.append(group)
 
     @classmethod
@@ -86,6 +86,7 @@ class Config(object):
             conf.config_file = path
             for name, value in module.__dict__.items():
                 if name.upper() == name:
+                    conf._items[name] = value
                     setattr(conf, name, value)
 
             return conf
@@ -121,8 +122,13 @@ class Config(object):
         if 'defaults' in kw:
             self.defaults = kw['defaults']
 
+        self._items = kw
         for key, value in kw.items():
             setattr(self, key, value)
+
+    @property
+    def items(self):
+        return self._items
 
     def reload(self):
         cfg = getattr(self, 'config_file', None)
