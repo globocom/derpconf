@@ -129,8 +129,13 @@ class Config(object):
     @property
     def items(self):
         values = {}
+
+        for key, value in self.class_defaults.items():
+            values[key] = value
+
         for key, value in self.defaults.items():
             values[key] = value
+
         for key, value in self._items.items():
             values[key] = value
 
