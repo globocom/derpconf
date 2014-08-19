@@ -128,7 +128,13 @@ class Config(object):
 
     @property
     def items(self):
-        return self._items
+        values = {}
+        for key, value in self.defaults.items():
+            values[key] = value
+        for key, value in self._items.items():
+            values[key] = value
+
+        return values
 
     def reload(self):
         cfg = getattr(self, 'config_file', None)
