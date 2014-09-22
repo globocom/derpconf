@@ -183,6 +183,18 @@ class Configuration(Vows.Context):
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("baz")
 
+        class WhenPassingPrefix(Vows.Context):
+            def topic(self):
+                os.environ['MYPREFIX_SOME_CONFIGURATION'] = "test value"
+                config = Config()
+
+                Config.allow_environment_variables(prefix='MYPREFIX_')
+
+                return config.SOME_CONFIGURATION
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal("test value")
+
     class WhenReloading(Vows.Context):
         def topic(self):
             class SpecialConfig(Config):
