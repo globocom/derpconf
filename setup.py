@@ -14,7 +14,7 @@ from derpconf.version import __version__
 
 tests_require = [
     'gevent',
-    'tornado-pyvows',
+    'pyVows',
     'coverage',
     'colorama',
     'tox',
