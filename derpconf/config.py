@@ -32,6 +32,7 @@ class Config(object):
     class_aliases = defaultdict(list)
     class_aliased_items = {}
     _allow_environment_variables = False
+    _environment_variables_prefix = ''
 
     @classmethod
     def define(cls, key, value, description, group='General'):
@@ -57,8 +58,9 @@ class Config(object):
         return None
 
     @classmethod
-    def allow_environment_variables(cls):
+    def allow_environment_variables(cls, prefix=''):
         cls._allow_environment_variables = True
+        cls._environment_variables_prefix = prefix
 
     @classmethod
     def load(cls, path, conf_name=None, lookup_paths=[], defaults={}):
@@ -172,11 +174,12 @@ class Config(object):
             super(Config, self).__setattr__(name, value)
 
     def __getattribute__(self, name):
-        if name in ['allow_environment_variables']:
+        if name in ['allow_environment_variables', '_environment_variables_prefix']:
             return super(Config, self).__getattribute__(name)
 
         if self.allow_environment_variables:
-            value = os.environ.get(name, None)
+            prefix = self._environment_variables_prefix
+            value = os.environ.get(prefix + name, None)
             if value is not None:
                 return value
 

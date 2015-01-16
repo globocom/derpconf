@@ -57,6 +57,17 @@ If there's an environment variable with the same name as the given configuration
 
     # even if the default for 'SOMETHING' or the value in the config file is different from 'value'
 
+
+It's useful to use prefixes to make sure your project environment variables do not conflict with other projects's environment variables:
+
+    from derpconf.config import Config
+
+    Config.allow_environment_variables(prefix='MYAPP_')
+
+    # called program with MYAPP_SOMETHING=value myprogram.py
+    assert config.SOMETHING == "value"
+
+
 Reloading Configurations
 ------------------------
 
