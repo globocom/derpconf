@@ -50,6 +50,20 @@ class Configuration(Vows.Context):
             def should_not_have_lower_case_value(self, topic):
                 expect(hasattr(topic, 'baz')).to_be_false()
 
+        class WhenFileExistsAndEnvironmentVariablesAreNotAllowed(Vows.Context):
+            def teardown(self):
+                del os.environ["PROPER"]
+
+            def topic(self):
+                os.environ["PROPER"] = 'env var value'
+                Config._allow_environment_variables = False
+                return Config.load(fix('sample.conf'), defaults={
+                    'PROPER': 'PROPERVALUE'
+                })
+
+            def should_have_set_value_rather_than_env_var_value(self, topic):
+                expect(topic.PROPER).to_equal('PROPERVALUE')
+
         class WhenPathIsNone(Vows.Context):
             class AndConfNameExists(Vows.Context):
                 def topic(self):
