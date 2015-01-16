@@ -163,6 +163,21 @@ class Configuration(Vows.Context):
         def should_have_description(self, topic):
             expect(topic.get_description('some_key')).to_equal('test key')
 
+
+    class WhenEnvironmentVariablesIsDisabled(Vows.Context):
+        def topic(self):
+            Config._allow_environment_variables = False
+            config = Config.load(fix('sample.conf'))
+
+            try:
+                os.environ['FOO'] = "baz"
+                return config.FOO
+            finally:
+                del os.environ['FOO']
+
+        def should_be_equal_to_env(self, topic):
+            expect(topic).to_equal("bar")
+
     class WhenGettingFromEnvironment(Vows.Context):
         class WhenKeyDoesNotExistInConfiguration(Vows.Context):
             def topic(self):
@@ -175,6 +190,7 @@ class Configuration(Vows.Context):
 
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("test value")
+
 
         class WhenKeyExistsInConfigurationFile(Vows.Context):
             def topic(self):

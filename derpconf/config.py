@@ -172,10 +172,10 @@ class Config(object):
             super(Config, self).__setattr__(name, value)
 
     def __getattribute__(self, name):
-        if name in ['allow_environment_variables']:
+        if name in ['_allow_environment_variables']:
             return super(Config, self).__getattribute__(name)
 
-        if self.allow_environment_variables:
+        if self._allow_environment_variables:
             value = os.environ.get(name, None)
             if value is not None:
                 return value
