@@ -10,6 +10,7 @@
 
 import os
 from os.path import abspath, join, dirname
+from collections import defaultdict
 
 from pyvows import Vows, expect
 
@@ -119,8 +120,14 @@ class Configuration(Vows.Context):
 
     class WhenVerifying(Vows.Context):
         def topic(self):
-            Config.define('some_key', 'default', 'test key')
-            return Config.verify(fix('missing.conf'))
+            class SpecialConfig(Config):
+                class_defaults = {}
+                class_group_items = defaultdict(list)
+                class_groups = []
+                class_descriptions = {}
+
+            SpecialConfig.define('some_key', 'default', 'test key')
+            return SpecialConfig.verify(fix('missing.conf'))
 
         def should_be_lengthy(self, topic):
             expect(topic).to_length(1)
@@ -186,7 +193,10 @@ class Configuration(Vows.Context):
     class WhenReloading(Vows.Context):
         def topic(self):
             class SpecialConfig(Config):
-                pass
+                class_defaults = {}
+                class_group_items = defaultdict(list)
+                class_groups = []
+                class_descriptions = {}
 
             config = SpecialConfig.load(fix('sample.conf'), defaults={
                 'PROPER': 'PROPERVALUE'
@@ -201,4 +211,3 @@ class Configuration(Vows.Context):
         def should_have_uberfoo(self, topic):
             expect(hasattr(topic, 'UBERFOO')).to_be_true()
             expect(topic.UBERFOO).to_equal('baz')
-

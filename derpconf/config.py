@@ -164,9 +164,10 @@ class Config(object):
         raise KeyError('No config called \'%s\'' % name)
 
     def __setattr__(self, name, value):
-        if name in Config.class_aliased_items:
-            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name, Config.class_aliased_items[name]))
-            self.__setattr__(Config.class_aliased_items[name], value)
+        if name in self.__class__.class_aliased_items:
+            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name,
+                self.__class__.class_aliased_items[name]))
+            self.__setattr__(self.__class__.class_aliased_items[name], value)
         else:
             super(Config, self).__setattr__(name, value)
 
@@ -185,15 +186,16 @@ class Config(object):
         if name in self.__dict__:
             return self.__dict__[name]
 
-        if name in Config.class_aliased_items:
-            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name, Config.class_aliased_items[name]))
-            return self.__getattr__(Config.class_aliased_items[name])
+        if name in self.__class__.class_aliased_items:
+            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name,
+                self.__class__.class_aliased_items[name]))
+            return self.__getattr__(self.__class__.class_aliased_items[name])
 
         if 'defaults' in self.__dict__ and name in self.__dict__['defaults']:
             return self.__dict__['defaults'][name]
 
-        if name in Config.class_defaults:
-            return Config.class_defaults[name]
+        if name in self.__class__.class_defaults:
+            return self.__class__.class_defaults[name]
 
         raise AttributeError(name)
 
