@@ -1,7 +1,5 @@
 Source: derpconf
-Maintainer: globo.com <timehome@corp.globo.com>
-Uploaders: Wichert Akkerman <wichert@wiggy.net>,
- Marcelo Jorge Vieira (metal) <metal@debian.org>
+Maintainer: Marcelo Jorge Vieira <metal@debian.org>
 Section: python
 Priority: optional
 Standards-Version: 3.9.4
