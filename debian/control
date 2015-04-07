@@ -23,4 +23,4 @@ Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, python-six
 Provides: ${python:Provides}
 Description: Python module to abstract loading configuration files for your app
- derpconf abstracts loading configuration files for your app.
+ Abstracts loading configuration files for your app.
