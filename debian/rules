@@ -5,6 +5,10 @@
 override_dh_auto_test:
 	$(MAKE) test
 
+override_dh_clean:
+	rm -rf derpconf.egg-info
+	dh_clean
+
 get-orig-source:
 	OUTDIR=$$PWD ; \
 	MAKEFILE=`echo $(MAKEFILE_LIST) | awk '{ print $$1 }'` ; \
