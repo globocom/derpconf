@@ -3,15 +3,16 @@ Upstream-Name: derpconf
 Source: https://github.com/globocom/derpconf
 
 Files: *
-Copyright: 2012 globo.com <timehome@corp.globo.com>
+Copyright: 2011-2015 globo.com <timehome@corp.globo.com>
 License: MIT
 
 Files: debian/*
-Copyright: 2012 globo.com <timehome@corp.globo.com>
+Copyright: 2011-2015 globo.com <timehome@corp.globo.com>,
+           2014-2015 Marcelo Jorge Vieira <metal@debian.org>
 License: MIT
 
 License: MIT
-  Copyright (c) 2012 globo.com <timehome@corp.globo.com>
+  Copyright (c) 2011-2015 globo.com <timehome@corp.globo.com>
   .
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
