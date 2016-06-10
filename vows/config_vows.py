@@ -76,6 +76,24 @@ class Configuration(Vows.Context):
                 def should_have_default_values(self, topic):
                     expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
 
+        class WhenPathIsDirectory(Vows.Context):
+            def topic(self):
+                return Config.load(fix('conf.d'), defaults={
+                    'PROPER': 'PROPERVALUE'
+                })
+
+            def should_have_default_value(self, topic):
+                expect(topic.PROPER).to_equal('PROPERVALUE')
+
+            def should_have_overridden_value(self, topic):
+                expect(topic.FOO).to_equal('override')
+
+            def should_have_new_value(self, topic):
+                expect(topic.NEW).to_equal('thing')
+
+            def should_not_have_lower_case_value(self, topic):
+                expect(hasattr(topic, 'baz')).to_be_false()
+
     class WhenSettingAnAlias(Vows.Context):
 
         def topic(self):
