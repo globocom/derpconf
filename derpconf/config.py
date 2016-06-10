@@ -12,7 +12,7 @@ import sys
 import os
 import logging
 from collections import defaultdict
-from os.path import join, exists, abspath, dirname
+from os.path import join, exists, abspath, dirname, isdir
 import imp
 
 import six
@@ -76,6 +76,16 @@ class Config(object):
 
     @classmethod
     def __load_from_path(cls, conf, path):
+        if isdir(path):
+            conf.config_folder = path
+            files = sorted(os.listdir(path))
+
+            for file in files:
+                filepath = path + os.sep + file
+                conf = Config.__load_from_path(conf, filepath)
+
+            return conf
+
         with open(path) as config_file:
             name = 'configuration'
             code = config_file.read()
