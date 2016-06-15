@@ -21,6 +21,7 @@ tests_require = [
     'six',
 ]
 
+
 def run_setup(extension_modules=[]):
     setup(
         name='derpconf',
