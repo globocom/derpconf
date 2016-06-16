@@ -1,3 +1,9 @@
+derpconf (0.8.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Gilles Dubuc <gilles@wikimedia.org>  Thu, 16 Jun 2016 16:26:41 +0000
+
 derpconf (0.7.3-1) unstable; urgency=low
 
    * New upstream release (Closes: #774656)
