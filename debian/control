@@ -1,5 +1,6 @@
 Source: derpconf
 Maintainer: Marcelo Jorge Vieira <metal@debian.org>
+Uploaders: Gilles Dubuc <gilles@wikimedia.org>
 Section: python
 Priority: optional
 Standards-Version: 3.9.6
