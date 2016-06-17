@@ -3,7 +3,7 @@ Maintainer: Marcelo Jorge Vieira <metal@debian.org>
 Uploaders: Gilles Dubuc <gilles@wikimedia.org>
 Section: python
 Priority: optional
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Build-Depends: debhelper (>= 8),
                python-setuptools (>= 0.6b3),
                python-all (>= 2.6.6-3),
