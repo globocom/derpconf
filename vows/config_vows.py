@@ -245,3 +245,43 @@ class Configuration(Vows.Context):
         def should_have_uberfoo(self, topic):
             expect(hasattr(topic, 'UBERFOO')).to_be_true()
             expect(topic.UBERFOO).to_equal('baz')
+
+    class WhenGeneratingConfig(Vows.Context):
+        def topic(self):
+            class SpecialConfig(Config):
+                class_defaults = {}
+                class_group_items = defaultdict(list)
+                class_groups = []
+                class_descriptions = {}
+
+            SpecialConfig.define(
+                'SOME_TUPLE_VAR',
+                ('foo', 'bar'),
+                'Tuple var from config',
+                'some config'
+            )
+
+            text = SpecialConfig.get_config_text()
+
+            return text.split('\n')
+
+        def should_have_uberfoo(self, topic):
+            expect(topic).to_equal([
+                '################################# some config ##################################',
+                '',
+                '## Tuple var from config',
+                '## Defaults to: #    (',
+                "#        'foo',",
+                "#        'bar',",
+                '#    )',
+                '',
+                '#SOME_TUPLE_VAR = #    (',
+                "#        'foo',",
+                "#        'bar',",
+                '#    )',
+                '',
+                '',
+                '################################################################################',
+                '',
+                ''
+            ])

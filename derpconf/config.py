@@ -239,7 +239,7 @@ class Config(object):
                 result.append('## %s' % wrapped)
                 if key in cls.class_aliases:
                     result.append('## Aliases: %s' % ', '.join(cls.class_aliases[key]))
-                result.append('## Defaults to: %s' % value)
+                result.append('## Defaults to: %s' % format_value(value))
                 result.append('#%s = %s' % (key, format_value(value)))
             result.append('')
             result.append(SEPARATOR * MAX_LEN)
