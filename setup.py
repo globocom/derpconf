@@ -42,7 +42,7 @@ def run_setup(extension_modules=[]):
             'Natural Language :: English',
             'Operating System :: MacOS',
             'Operating System :: POSIX :: Linux',
-            'Programming Language :: Python :: 2.6',
+            'Programming Language :: Python :: 2.7',
         ],
         packages=['derpconf'],
         package_dir={"derpconf": "derpconf"},
