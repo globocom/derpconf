@@ -81,8 +81,9 @@ class Config(object):
             files = sorted(os.listdir(path))
 
             for file in files:
-                filepath = path + os.sep + file
-                conf = Config.__load_from_path(conf, filepath)
+                if file.endswith('.conf'):
+                    filepath = path + os.sep + file
+                    conf = Config.__load_from_path(conf, filepath)
 
             return conf
 
