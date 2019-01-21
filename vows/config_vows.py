@@ -98,6 +98,7 @@ class Configuration(Vows.Context):
 
         def topic(self):
             Config.alias('OTHER_ENGINE', 'ENGINE')
+
             return Config(OTHER_ENGINE='x')
 
         def should_set_engine_attribute(self, config):
@@ -109,6 +110,7 @@ class Configuration(Vows.Context):
     class WhenSettingAnAliasedKey(Vows.Context):
         def topic(self):
             Config.alias('LOADER_ALIAS', 'LOADER')
+
             return Config(LOADER='y')
 
         def should_set_loader_attribute(self, config):
@@ -121,6 +123,7 @@ class Configuration(Vows.Context):
         def topic(self):
             Config.alias('STORAGE_ALIAS', 'STORAGE')
             Config.alias('STORAGE_ALIAS_ALIAS', 'STORAGE_ALIAS')
+
             return Config(STORAGE_ALIAS_ALIAS='z')
 
         def should_set_storage_attribute(self, config):
@@ -145,6 +148,7 @@ class Configuration(Vows.Context):
                 class_descriptions = {}
 
             SpecialConfig.define('some_key', 'default', 'test key')
+
             return SpecialConfig.verify(fix('missing.conf'))
 
         def should_be_lengthy(self, topic):
@@ -176,6 +180,7 @@ class Configuration(Vows.Context):
     class WhenGetDescription(Vows.Context):
         def topic(self):
             Config.define('some_key', 'default', 'test key')
+
             return Config.load(fix('missing.conf'))
 
         def should_have_description(self, topic):
@@ -189,6 +194,7 @@ class Configuration(Vows.Context):
 
             try:
                 os.environ['FOO'] = "baz"
+
                 return config.FOO
             finally:
                 del os.environ['FOO']
@@ -217,6 +223,7 @@ class Configuration(Vows.Context):
 
                 try:
                     os.environ['FOO'] = "baz"
+
                     return config.FOO
                 finally:
                     del os.environ['FOO']
@@ -270,15 +277,15 @@ class Configuration(Vows.Context):
                 '################################# some config ##################################',
                 '',
                 '## Tuple var from config',
-                '## Defaults to: #    (',
-                "#        'foo',",
-                "#        'bar',",
-                '#    )',
+                '## Defaults to: (',
+                "#    'foo',",
+                "#    'bar',",
+                '#)',
                 '',
-                '#SOME_TUPLE_VAR = #    (',
-                "#        'foo',",
-                "#        'bar',",
-                '#    )',
+                '#SOME_TUPLE_VAR = (',
+                "#    'foo',",
+                "#    'bar',",
+                '#)',
                 '',
                 '',
                 '################################################################################',

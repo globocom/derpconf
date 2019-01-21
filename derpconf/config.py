@@ -38,6 +38,7 @@ class Config(object):
         cls.class_defaults[key] = value
         cls.class_descriptions[key] = description
         cls.class_group_items[group].append(key)
+
         if group not in cls.class_groups:
             cls.class_groups.append(group)
 
@@ -52,8 +53,10 @@ class Config(object):
     def get_conf_file(cls, conf_name, lookup_paths):
         for conf_path in lookup_paths:
             conf_path_file = abspath(join(conf_path, conf_name))
+
             if exists(conf_path_file):
                 return conf_path_file
+
         return None
 
     @classmethod
@@ -72,6 +75,7 @@ class Config(object):
             raise ConfigurationError('Configuration file not found at path %s' % path)
 
         conf = cls(defaults=defaults)
+
         return cls.__load_from_path(conf, path)
 
     @classmethod
@@ -95,6 +99,7 @@ class Config(object):
             six.exec_(code, module.__dict__)
 
             conf.config_file = path
+
             for name, value in module.__dict__.items():
                 if name.upper() == name:
                     conf._items[name] = value
@@ -118,11 +123,13 @@ class Config(object):
             six.exec_(code, module.__dict__)
 
             conf = cls(defaults=[])
+
             for name, value in module.__dict__.items():
                 if name.upper() == name:
                     setattr(conf, name, value)
 
             not_found = []
+
             for key, value in cls.class_defaults.items():
                 if key not in conf.__dict__:
                     not_found.append((key, value))
@@ -134,6 +141,7 @@ class Config(object):
             self.defaults = kw['defaults']
 
         self._items = kw
+
         for key, value in kw.items():
             setattr(self, key, value)
 
@@ -154,6 +162,7 @@ class Config(object):
 
     def reload(self):
         cfg = getattr(self, 'config_file', None)
+
         if cfg is None:
             return
 
@@ -167,6 +176,7 @@ class Config(object):
     def get(self, name, default=None):
         if hasattr(self, name):
             return getattr(self, name)
+
         return default
 
     def get_description(self, name):
@@ -188,6 +198,7 @@ class Config(object):
 
         if self._allow_environment_variables:
             value = os.environ.get(name, None)
+
             if value is not None:
                 return value
 
@@ -200,6 +211,7 @@ class Config(object):
         if name in self.__class__.class_aliased_items:
             logging.warn('Option %s is marked as deprecated please use %s instead.' % (name,
                 self.__class__.class_aliased_items[name]))
+
             return self.__getattr__(self.__class__.class_aliased_items[name])
 
         if 'defaults' in self.__dict__ and name in self.__dict__['defaults']:
@@ -223,13 +235,16 @@ class Config(object):
         result = []
         MAX_LEN = 80
         SEPARATOR = '#'
+
         for group in cls.class_groups:
             keys = cls.class_group_items[group]
             sep_size = int(round((MAX_LEN - len(group)) / 2, 0)) - 1
             group_name = SEPARATOR * sep_size + ' ' + group + ' ' + SEPARATOR * sep_size
+
             if len(group_name) < MAX_LEN:
                 group_name += SEPARATOR
             result.append(group_name)
+
             for key in keys:
                 result.append('')
                 value = cls.class_defaults[key]
@@ -238,6 +253,7 @@ class Config(object):
                 wrapped = fill(description, width=78, subsequent_indent='## ')
 
                 result.append('## %s' % wrapped)
+
                 if key in cls.class_aliases:
                     result.append('## Aliases: %s' % ', '.join(cls.class_aliases[key]))
                 result.append('## Defaults to: %s' % format_value(value))
@@ -246,6 +262,7 @@ class Config(object):
             result.append(SEPARATOR * MAX_LEN)
             result.append('')
             result.append('')
+
         return '\n'.join(result)
 
 
@@ -271,27 +288,35 @@ spaces = ' ' * 4
 
 
 def format_tuple(value, tabs=0):
-    separator = spaces * (tabs + 1)
-    item_separator = spaces * (tabs + 2)
+    separator = spaces * (tabs + 0)
+    item_separator = spaces * (tabs + 1)
     start_delimiter = isinstance(value, tuple) and '(' or '['
     end_delimiter = isinstance(value, tuple) and ')' or ']'
 
-    representation = "#%s%s\n" % (separator, start_delimiter)
+    representation = ''
+
+    if tabs != 0:
+        representation += '#'
+    representation += "%s%s\n" % (separator, start_delimiter)
+
     for item in value:
         if isinstance(item, (tuple, list, set)):
             representation += format_tuple(item, tabs + 1)
         else:
             representation += '#%s' % item_separator + format_value(item) + ",\n"
     representation += "#%s%s%s\n" % (separator, end_delimiter, (tabs > 0 and ',' or ''))
+
     return representation
 
 
 def format_value(value):
     if isinstance(value, six.string_types):
         return "'%s'" % value
+
     if isinstance(value, (tuple, list, set)):
         return format_tuple(value)
-    return value
+
+    return str(value)
 
 if __name__ == '__main__':
     Config.define('foo', 'fooval', 'Foo is always a foo', 'FooValues')
