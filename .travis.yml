@@ -1,9 +1,14 @@
 language: python
+arch:
+  - amd64
+  - ppc64le
 python:
     - 2.7
     - 3.6
     - 3.8
 
+before_install:
+  - sudo chown -Rvf $USER:$GROUP ~/.cache/pip/wheels
 install:
   - sudo apt-get install -y librtmp-dev libevent-dev
   - make setup
