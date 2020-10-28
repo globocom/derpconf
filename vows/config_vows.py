@@ -16,7 +16,9 @@ from pyvows import Vows, expect
 
 from derpconf.config import Config, ConfigurationError
 
-fix = lambda name: abspath(join(dirname(__file__), 'fixtures', name))
+
+def fix(name):
+    return abspath(join(dirname(__file__), "fixtures", name))
 
 
 @Vows.batch
@@ -27,7 +29,7 @@ class Configuration(Vows.Context):
                 err = expect.error_to_happen(ConfigurationError)
 
                 with err:
-                    Config.load(fix('not-existent.conf'))
+                    Config.load(fix("not-existent.conf"))
 
                 return err
 
@@ -37,103 +39,103 @@ class Configuration(Vows.Context):
 
         class WhenFileExists(Vows.Context):
             def topic(self):
-                return Config.load(fix('sample.conf'), defaults={
-                    'PROPER': 'PROPERVALUE'
-                })
+                return Config.load(
+                    fix("sample.conf"), defaults={"PROPER": "PROPERVALUE"}
+                )
 
             def should_have_default_value(self, topic):
-                expect(topic.PROPER).to_equal('PROPERVALUE')
+                expect(topic.PROPER).to_equal("PROPERVALUE")
 
             def should_have_set_value(self, topic):
-                expect(topic.FOO).to_equal('bar')
+                expect(topic.FOO).to_equal("bar")
 
             def should_not_have_lower_case_value(self, topic):
-                expect(hasattr(topic, 'baz')).to_be_false()
+                expect(hasattr(topic, "baz")).to_be_false()
 
         class WhenPathIsNone(Vows.Context):
             class AndConfNameExists(Vows.Context):
                 def topic(self):
-                    return Config.load(None, conf_name='sample.conf', lookup_paths=['vows/fixtures/'])
+                    return Config.load(
+                        None, conf_name="sample.conf", lookup_paths=["vows/fixtures/"]
+                    )
 
                 def should_have_set_value(self, topic):
-                    expect(topic.FOO).to_equal('bar')
+                    expect(topic.FOO).to_equal("bar")
 
             class AndConfNameDoesNotExist(Vows.Context):
                 def topic(self):
                     return Config.load(
-                        None, conf_name='not-existent.conf',
-                        lookup_paths=['vows/fixtures/'],
-                        defaults={'DEFAULT': 'DEFAULTVALUE'}
+                        None,
+                        conf_name="not-existent.conf",
+                        lookup_paths=["vows/fixtures/"],
+                        defaults={"DEFAULT": "DEFAULTVALUE"},
                     )
 
                 def should_have_default_values(self, topic):
-                    expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
+                    expect(topic.DEFAULT).to_equal("DEFAULTVALUE")
 
             class AndConfNameIsNone(Vows.Context):
                 def topic(self):
-                    return Config.load(None, defaults={'DEFAULT': 'DEFAULTVALUE'})
+                    return Config.load(None, defaults={"DEFAULT": "DEFAULTVALUE"})
 
                 def should_have_default_values(self, topic):
-                    expect(topic.DEFAULT).to_equal('DEFAULTVALUE')
+                    expect(topic.DEFAULT).to_equal("DEFAULTVALUE")
 
         class WhenPathIsDirectory(Vows.Context):
             def topic(self):
-                return Config.load(fix('conf.d'), defaults={
-                    'PROPER': 'PROPERVALUE'
-                })
+                return Config.load(fix("conf.d"), defaults={"PROPER": "PROPERVALUE"})
 
             def should_have_default_value(self, topic):
-                expect(topic.PROPER).to_equal('PROPERVALUE')
+                expect(topic.PROPER).to_equal("PROPERVALUE")
 
             def should_have_overridden_value(self, topic):
-                expect(topic.FOO).to_equal('override')
+                expect(topic.FOO).to_equal("override")
 
             def should_have_new_value(self, topic):
-                expect(topic.NEW).to_equal('thing')
+                expect(topic.NEW).to_equal("thing")
 
             def should_not_have_lower_case_value(self, topic):
-                expect(hasattr(topic, 'baz')).to_be_false()
+                expect(hasattr(topic, "baz")).to_be_false()
 
     class WhenSettingAnAlias(Vows.Context):
-
         def topic(self):
-            Config.alias('OTHER_ENGINE', 'ENGINE')
+            Config.alias("OTHER_ENGINE", "ENGINE")
 
-            return Config(OTHER_ENGINE='x')
+            return Config(OTHER_ENGINE="x")
 
         def should_set_engine_attribute(self, config):
-            expect(config.ENGINE).to_equal('x')
+            expect(config.ENGINE).to_equal("x")
 
         def should_set_other_engine_attribute(self, config):
-            expect(config.OTHER_ENGINE).to_equal('x')
+            expect(config.OTHER_ENGINE).to_equal("x")
 
     class WhenSettingAnAliasedKey(Vows.Context):
         def topic(self):
-            Config.alias('LOADER_ALIAS', 'LOADER')
+            Config.alias("LOADER_ALIAS", "LOADER")
 
-            return Config(LOADER='y')
+            return Config(LOADER="y")
 
         def should_set_loader_attribute(self, config):
-            expect(config.LOADER).to_equal('y')
+            expect(config.LOADER).to_equal("y")
 
         def should_set_loader_alias_attribute(self, config):
-            expect(config.LOADER_ALIAS).to_equal('y')
+            expect(config.LOADER_ALIAS).to_equal("y")
 
     class WithAliasedAliases(Vows.Context):
         def topic(self):
-            Config.alias('STORAGE_ALIAS', 'STORAGE')
-            Config.alias('STORAGE_ALIAS_ALIAS', 'STORAGE_ALIAS')
+            Config.alias("STORAGE_ALIAS", "STORAGE")
+            Config.alias("STORAGE_ALIAS_ALIAS", "STORAGE_ALIAS")
 
-            return Config(STORAGE_ALIAS_ALIAS='z')
+            return Config(STORAGE_ALIAS_ALIAS="z")
 
         def should_set_storage_attribute(self, config):
-            expect(config.STORAGE).to_equal('z')
+            expect(config.STORAGE).to_equal("z")
 
         def should_set_storage_alias_attribute(self, config):
-            expect(config.STORAGE_ALIAS).to_equal('z')
+            expect(config.STORAGE_ALIAS).to_equal("z")
 
         def should_set_storage_alias_alias_attribute(self, config):
-            expect(config.STORAGE_ALIAS_ALIAS).to_equal('z')
+            expect(config.STORAGE_ALIAS_ALIAS).to_equal("z")
 
         class WithDefaultValues(Vows.Context):
             def topic(self):
@@ -147,30 +149,30 @@ class Configuration(Vows.Context):
                 class_groups = []
                 class_descriptions = {}
 
-            SpecialConfig.define('some_key', 'default', 'test key')
+            SpecialConfig.define("some_key", "default", "test key")
 
-            return SpecialConfig.verify(fix('missing.conf'))
+            return SpecialConfig.verify(fix("missing.conf"))
 
         def should_be_lengthy(self, topic):
             expect(topic).to_length(1)
 
     class WhenUsedAsDict(Vows.Context):
         def topic(self):
-            return Config.load(fix('sample.conf'))
+            return Config.load(fix("sample.conf"))
 
         def should_have_get_value_as_dict(self, topic):
-            expect(topic['FOO']).to_equal('bar')
+            expect(topic["FOO"]).to_equal("bar")
 
         def should_have_set_value_as_dict(self, topic):
-            topic['X'] = 'something'
-            expect(topic['X']).to_equal('something')
+            topic["X"] = "something"
+            expect(topic["X"]).to_equal("something")
 
         class WithError(Vows.Context):
             def topic(self, parent_topic):
                 err = expect.error_to_happen(KeyError)
 
                 with err:
-                    parent_topic['INVALID_KEY']
+                    parent_topic["INVALID_KEY"]
 
                 return err
 
@@ -179,25 +181,24 @@ class Configuration(Vows.Context):
 
     class WhenGetDescription(Vows.Context):
         def topic(self):
-            Config.define('some_key', 'default', 'test key')
+            Config.define("some_key", "default", "test key")
 
-            return Config.load(fix('missing.conf'))
+            return Config.load(fix("missing.conf"))
 
         def should_have_description(self, topic):
-            expect(topic.get_description('some_key')).to_equal('test key')
-
+            expect(topic.get_description("some_key")).to_equal("test key")
 
     class WhenEnvironmentVariablesIsDisabled(Vows.Context):
         def topic(self):
             Config._allow_environment_variables = False
-            config = Config.load(fix('sample.conf'))
+            config = Config.load(fix("sample.conf"))
 
             try:
-                os.environ['FOO'] = "baz"
+                os.environ["FOO"] = "baz"
 
                 return config.FOO
             finally:
-                del os.environ['FOO']
+                del os.environ["FOO"]
 
         def should_be_equal_to_env(self, topic):
             expect(topic).to_equal("bar")
@@ -205,7 +206,7 @@ class Configuration(Vows.Context):
     class WhenGettingFromEnvironment(Vows.Context):
         class WhenKeyDoesNotExistInConfiguration(Vows.Context):
             def topic(self):
-                os.environ['SOME_CONFIGURATION'] = "test value"
+                os.environ["SOME_CONFIGURATION"] = "test value"
                 config = Config()
 
                 Config.allow_environment_variables()
@@ -215,18 +216,17 @@ class Configuration(Vows.Context):
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("test value")
 
-
         class WhenKeyExistsInConfigurationFile(Vows.Context):
             def topic(self):
-                config = Config.load(fix('sample.conf'))
+                config = Config.load(fix("sample.conf"))
                 Config.allow_environment_variables()
 
                 try:
-                    os.environ['FOO'] = "baz"
+                    os.environ["FOO"] = "baz"
 
                     return config.FOO
                 finally:
-                    del os.environ['FOO']
+                    del os.environ["FOO"]
 
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("baz")
@@ -239,19 +239,19 @@ class Configuration(Vows.Context):
                 class_groups = []
                 class_descriptions = {}
 
-            config = SpecialConfig.load(fix('sample.conf'), defaults={
-                'PROPER': 'PROPERVALUE'
-            })
+            config = SpecialConfig.load(
+                fix("sample.conf"), defaults={"PROPER": "PROPERVALUE"}
+            )
 
-            SpecialConfig.define('UBERFOO', 'baz', 'something', 'else')
+            SpecialConfig.define("UBERFOO", "baz", "something", "else")
 
             config.reload()
 
             return config
 
         def should_have_uberfoo(self, topic):
-            expect(hasattr(topic, 'UBERFOO')).to_be_true()
-            expect(topic.UBERFOO).to_equal('baz')
+            expect(hasattr(topic, "UBERFOO")).to_be_true()
+            expect(topic.UBERFOO).to_equal("baz")
 
     class WhenGeneratingConfig(Vows.Context):
         def topic(self):
@@ -262,33 +262,32 @@ class Configuration(Vows.Context):
                 class_descriptions = {}
 
             SpecialConfig.define(
-                'SOME_TUPLE_VAR',
-                ('foo', 'bar'),
-                'Tuple var from config',
-                'some config'
+                "SOME_TUPLE_VAR", ("foo", "bar"), "Tuple var from config", "some config"
             )
 
             text = SpecialConfig.get_config_text()
 
-            return text.split('\n')
+            return text.split("\n")
 
         def should_have_uberfoo(self, topic):
-            expect(topic).to_equal([
-                '################################# some config ##################################',
-                '',
-                '## Tuple var from config',
-                '## Defaults to: (',
-                "#    'foo',",
-                "#    'bar',",
-                '#)',
-                '',
-                '#SOME_TUPLE_VAR = (',
-                "#    'foo',",
-                "#    'bar',",
-                '#)',
-                '',
-                '',
-                '################################################################################',
-                '',
-                ''
-            ])
+            expect(topic).to_equal(
+                [
+                    "################################# some config ##################################",
+                    "",
+                    "## Tuple var from config",
+                    "## Defaults to: (",
+                    "#    'foo',",
+                    "#    'bar',",
+                    "#)",
+                    "",
+                    "#SOME_TUPLE_VAR = (",
+                    "#    'foo',",
+                    "#    'bar',",
+                    "#)",
+                    "",
+                    "",
+                    "################################################################################",
+                    "",
+                    "",
+                ]
+            )
