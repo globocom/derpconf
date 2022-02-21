@@ -14,6 +14,7 @@ import logging
 from collections import defaultdict
 from os.path import join, exists, abspath, dirname, isdir
 import imp
+import json
 
 import six
 from textwrap import fill
@@ -200,9 +201,41 @@ class Config(object):
             value = os.environ.get(name, None)
 
             if value is not None:
-                return value
+                return self.cast_by_default_type(name, value)
 
         return super(Config, self).__getattribute__(name)
+    
+    def cast_by_default_type(self, name, value):
+        if name in self.__class__.class_defaults:
+            default_type = type(self.__class__.class_defaults[name])
+
+            if default_type == str:
+                return value
+            elif default_type == int:
+                return int(value)
+            elif default_type == float:
+                return float(value)
+            elif default_type == bool:
+                return self.safe_cast_to_bool(value)
+            elif default_type in [list, dict, tuple, set]:
+                return json.loads(value)
+
+        try:
+            return json.loads(value)
+        except:
+            return self.safe_cast_to_bool(value)
+
+    def safe_cast_to_bool(self, value):
+        try:
+            return bool(int(value))
+        except ValueError:
+            if str(value).lower() in ('true', 'yes', 'y', 'on'):
+                return True
+            elif str(value).lower() in ('false', 'no', 'n', 'off'):
+                return False
+            else:
+                return value
+
 
     def __getattr__(self, name):
         if name in self.__dict__:

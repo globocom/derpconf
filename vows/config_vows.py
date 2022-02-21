@@ -215,7 +215,6 @@ class Configuration(Vows.Context):
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("test value")
 
-
         class WhenKeyExistsInConfigurationFile(Vows.Context):
             def topic(self):
                 config = Config.load(fix('sample.conf'))
@@ -230,6 +229,222 @@ class Configuration(Vows.Context):
 
             def should_be_equal_to_env(self, topic):
                 expect(topic).to_equal("baz")
+                
+        class WhenDefaultEnvTypeIsStr(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOO_STR",
+                    "",
+                    "Foos",
+                )
+                try:
+                    os.environ['FOO_STR'] = "foo"
+
+                    return config.FOO_STR
+                finally:
+                    del os.environ['FOO_STR']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal("foo")
+                expect(type(topic)).to_equal(str)
+        
+        class WhenDefaultEnvTypeIsInt(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOO_INT",
+                    0,
+                    "Foo.",
+                )
+                try:
+                    os.environ['FOO_INT'] = "10"
+
+                    return config.FOO_INT
+                finally:
+                    del os.environ['FOO_INT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(10)
+                expect(type(topic)).to_equal(int)
+        
+        class WhenDefaultEnvTypeIsFloat(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOO_FLOAT",
+                    0.0,
+                    "Foo.",
+                )
+                try:
+                    os.environ['FOO_FLOAT'] = "10.5"
+
+                    return config.FOO_FLOAT
+                finally:
+                    del os.environ['FOO_FLOAT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(10.5)
+                expect(type(topic)).to_equal(float)
+
+        class WhenDefaultEnvTypeIsBool(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOO_BOOL",
+                    False,
+                    "Foo.",
+                )
+                try:
+                    os.environ['FOO_BOOL'] = "True"
+
+                    return config.FOO_BOOL
+                finally:
+                    del os.environ['FOO_BOOL']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_be_true()
+                expect(type(topic)).to_equal(bool)
+        
+        class WhenDefaultEnvTypeIsDict(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOO_DICT",
+                    {},
+                    "Foo.",
+                )
+                try:
+                    os.environ['FOO_DICT'] = '{"foo": "bar"}'
+
+                    return config.FOO_DICT
+                finally:
+                    del os.environ['FOO_DICT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal({"foo": "bar"})
+                expect(type(topic)).to_equal(dict)
+        
+        class WhenDefaultEnvTypeIsList(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+                Config.define(
+                    "FOOs",
+                    [],
+                    "Foos.",
+                )
+                try:
+                    os.environ['FOOs'] = '["bar", "baj"]'
+
+                    return config.FOOs
+                finally:
+                    del os.environ['FOOs']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(["bar", "baj"])
+                expect(type(topic)).to_equal(list)
+  
+        class WhenEnvTypeIsStr(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO_STR'] = "foo"
+
+                    return config.FOO_STR
+                finally:
+                    del os.environ['FOO_STR']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal("foo")
+                expect(type(topic)).to_equal(str)
+        
+        class WhenEnvTypeIsInt(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO_INT'] = "10"
+
+                    return config.FOO_INT
+                finally:
+                    del os.environ['FOO_INT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(10)
+                expect(type(topic)).to_equal(int)
+        
+        class WhenEnvTypeIsFloat(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO_FLOAT'] = "10.5"
+
+                    return config.FOO_FLOAT
+                finally:
+                    del os.environ['FOO_FLOAT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(10.5)
+                expect(type(topic)).to_equal(float)
+
+        class WhenEnvTypeIsBool(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO_BOOL'] = "True"
+
+                    return config.FOO_BOOL
+                finally:
+                    del os.environ['FOO_BOOL']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_be_true()
+                expect(type(topic)).to_equal(bool)
+        
+        class WhenEnvTypeIsDict(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOO_DICT'] = '{"foo": "bar"}'
+
+                    return config.FOO_DICT
+                finally:
+                    del os.environ['FOO_DICT']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal({"foo": "bar"})
+                expect(type(topic)).to_equal(dict)
+        
+        class WhenEnvTypeIsList(Vows.Context):
+            def topic(self):
+                config = Config.load(fix('sample.conf'))
+                Config.allow_environment_variables()
+
+                try:
+                    os.environ['FOOs'] = '["bar", "baj"]'
+
+                    return config.FOOs
+                finally:
+                    del os.environ['FOOs']
+
+            def should_be_equal_to_env(self, topic):
+                expect(topic).to_equal(["bar", "baj"])
+                expect(type(topic)).to_equal(list)
 
     class WhenReloading(Vows.Context):
         def topic(self):
