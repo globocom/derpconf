@@ -13,7 +13,7 @@ import os
 import logging
 from collections import defaultdict
 from os.path import join, exists, abspath, dirname, isdir
-import imp
+import importlib
 
 import six
 from textwrap import fill
@@ -94,7 +94,8 @@ class Config(object):
         with open(path) as config_file:
             name = 'configuration'
             code = config_file.read()
-            module = imp.new_module(name)
+            spec = importlib._bootstrap.ModuleSpec(name, None)
+            module = importlib.util.module_from_spec(spec)
 
             six.exec_(code, module.__dict__)
 
@@ -118,7 +119,8 @@ class Config(object):
         with open(path) as config_file:
             name = 'configuration'
             code = config_file.read()
-            module = imp.new_module(name)
+            spec = importlib._bootstrap.ModuleSpec(name, None)
+            module = importlib.util.module_from_spec(spec)
 
             six.exec_(code, module.__dict__)
 
