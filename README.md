@@ -1,7 +1,5 @@
 # derpconf
 
-[![Build Status](https://secure.travis-ci.org/globocom/derpconf.png?branch=master)](http://travis-ci.org/globocom/derpconf)
-
 derpconf abstracts loading configuration files for your app. derpconf was
 extracted from [thumbor](http://github.com/globocom/thumbor/).
 
