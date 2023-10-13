@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # thumbor imaging service
 # https://github.com/globocom/thumbor/wiki
@@ -18,11 +17,10 @@ tests_require = [
     'coverage',
     'colorama',
     'tox',
-    'six',
 ]
 
 
-def run_setup(extension_modules=[]):
+def run_setup():
     setup(
         name='derpconf',
         version=__version__,
@@ -42,6 +40,7 @@ def run_setup(extension_modules=[]):
             'Natural Language :: English',
             'Operating System :: MacOS',
             'Operating System :: POSIX :: Linux',
+            'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3.10',
             'Programming Language :: Python :: 3.11',
@@ -49,10 +48,6 @@ def run_setup(extension_modules=[]):
         ],
         packages=['derpconf'],
         package_dir={"derpconf": "derpconf"},
-        install_requires=[
-            'six',
-        ],
-
         extras_require={
             'tests': tests_require,
         },
