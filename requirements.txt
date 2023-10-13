@@ -3,4 +3,3 @@ pyVows
 coverage
 colorama
 tox
-six

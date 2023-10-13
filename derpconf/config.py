@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # derpconf
 # https://github.com/globocom/derpconf
@@ -15,7 +14,6 @@ from collections import defaultdict
 from os.path import join, exists, abspath, dirname, isdir
 import importlib
 
-import six
 from textwrap import fill
 
 
@@ -23,7 +21,7 @@ class ConfigurationError(RuntimeError):
     pass
 
 
-class Config(object):
+class Config:
     class_defaults = {}
     class_group_items = defaultdict(list)
     class_groups = []
@@ -97,7 +95,7 @@ class Config(object):
             spec = importlib._bootstrap.ModuleSpec(name, None)
             module = importlib.util.module_from_spec(spec)
 
-            six.exec_(code, module.__dict__)
+            exec(code, module.__dict__)
 
             conf.config_file = path
 
@@ -122,7 +120,7 @@ class Config(object):
             spec = importlib._bootstrap.ModuleSpec(name, None)
             module = importlib.util.module_from_spec(spec)
 
-            six.exec_(code, module.__dict__)
+            exec(code, module.__dict__)
 
             conf = cls(defaults=[])
 
@@ -188,15 +186,15 @@ class Config(object):
 
     def __setattr__(self, name, value):
         if name in self.__class__.class_aliased_items:
-            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name,
+            logging.warn('Option {} is marked as deprecated please use {} instead.'.format(name,
                 self.__class__.class_aliased_items[name]))
             self.__setattr__(self.__class__.class_aliased_items[name], value)
         else:
-            super(Config, self).__setattr__(name, value)
+            super().__setattr__(name, value)
 
     def __getattribute__(self, name):
         if name in ['_allow_environment_variables']:
-            return super(Config, self).__getattribute__(name)
+            return super().__getattribute__(name)
 
         if self._allow_environment_variables:
             value = os.environ.get(name, None)
@@ -204,14 +202,14 @@ class Config(object):
             if value is not None:
                 return value
 
-        return super(Config, self).__getattribute__(name)
+        return super().__getattribute__(name)
 
     def __getattr__(self, name):
         if name in self.__dict__:
             return self.__dict__[name]
 
         if name in self.__class__.class_aliased_items:
-            logging.warn('Option %s is marked as deprecated please use %s instead.' % (name,
+            logging.warn('Option {} is marked as deprecated please use {} instead.'.format(name,
                 self.__class__.class_aliased_items[name]))
 
             return self.__getattr__(self.__class__.class_aliased_items[name])
@@ -259,7 +257,7 @@ class Config(object):
                 if key in cls.class_aliases:
                     result.append('## Aliases: %s' % ', '.join(cls.class_aliases[key]))
                 result.append('## Defaults to: %s' % format_value(value))
-                result.append('#%s = %s' % (key, format_value(value)))
+                result.append('#{} = {}'.format(key, format_value(value)))
             result.append('')
             result.append(SEPARATOR * MAX_LEN)
             result.append('')
@@ -299,20 +297,20 @@ def format_tuple(value, tabs=0):
 
     if tabs != 0:
         representation += '#'
-    representation += "%s%s\n" % (separator, start_delimiter)
+    representation += "{}{}\n".format(separator, start_delimiter)
 
     for item in value:
         if isinstance(item, (tuple, list, set)):
             representation += format_tuple(item, tabs + 1)
         else:
             representation += '#%s' % item_separator + format_value(item) + ",\n"
-    representation += "#%s%s%s\n" % (separator, end_delimiter, (tabs > 0 and ',' or ''))
+    representation += "#{}{}{}\n".format(separator, end_delimiter, (tabs > 0 and ',' or ''))
 
     return representation
 
 
 def format_value(value):
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         return "'%s'" % value
 
     if isinstance(value, (tuple, list, set)):
